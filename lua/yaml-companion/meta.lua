@@ -10,7 +10,8 @@
 ---@alias SchemaResult { result: Schema[] }
 
 ---@class Matcher
----@field match fun(bufnr: number): Schema | nil
+---@field name string
+---@field match fun(bufnr: number): Schema[] | nil
 ---@field handles fun(): Schema[]
 ---@field health fun()
 

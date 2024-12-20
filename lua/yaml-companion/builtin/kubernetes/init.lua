@@ -1,4 +1,4 @@
-local M = {}
+local M = { name = "kubernetes" }
 
 local api = vim.api
 local resources = require("yaml-companion.builtin.kubernetes.resources")
@@ -12,12 +12,22 @@ local schema = {
   uri = uri,
 }
 
-M.match = function(bufnr)
+M.parse = function(bufnr)
+  local kinds = {}
   local lines = api.nvim_buf_get_lines(bufnr, 0, -1, false)
   for _, line in ipairs(lines) do
+    if vim.regex("^kind: "):match_str(line) then
+      table.insert(kinds, vim.split(line, " ")[2])
+    end
+  end
+  return kinds
+end
+
+M.match = function(bufnr)
+  for _, kind in ipairs(M.parse(bufnr)) do
     for _, resource in ipairs(resources) do
-      if vim.regex("^kind: " .. resource .. "$"):match_str(line) then
-        return schema
+      if kind == resource then
+        return { schema }
       end
     end
   end

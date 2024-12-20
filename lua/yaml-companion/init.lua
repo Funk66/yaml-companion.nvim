@@ -13,19 +13,19 @@ M.setup = function(opts)
   return config.options.lspconfig
 end
 
---- Set the schema used for a buffer.
+--- Set the schemas used for a buffer.
 ---@param bufnr number: Buffer number
----@param schema SchemaResult | Schema
-M.set_buf_schema = function(bufnr, schema)
-  M.ctx.schema(bufnr, schema)
+---@param schemas Schema[]
+---@return nil
+M.set_buf_schemas = function(bufnr, schemas)
+  M.ctx.schemas(bufnr, schemas)
 end
 
---- Get the schema used for a buffer.
+--- Get the schemas used for a buffer.
 ---@param bufnr number: Buffer number
-M.get_buf_schema = function(bufnr)
-  -- TODO: remove the result and instead return a Schema directly
-  -- this will break existing clients :/
-  return { result = { M.ctx.schema(bufnr) } }
+---@return Schema[]
+M.get_buf_schemas = function(bufnr)
+  return M.ctx.schemas(bufnr)
 end
 
 --- Loads a matcher.

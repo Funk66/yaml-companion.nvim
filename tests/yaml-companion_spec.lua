@@ -31,13 +31,13 @@ describe("schema detection:", function()
   it("should detect default schema right after start", function()
     assert(buf("", "yaml", ".gitlab-ci.yml"))
     local expect = { result = { require("yaml-companion.schema").default() } }
-    local result = require("yaml-companion").get_buf_schema(0)
+    local result = require("yaml-companion").get_buf_schemas(0)
     assert.are.same(expect, result)
   end)
 
   it("should detect 'gitlab-ci' schema", function()
     wait_until(function()
-      local result = require("yaml-companion").get_buf_schema(0)
+      local result = require("yaml-companion").get_buf_schemas(0)
       if result.result[1].name ~= require("yaml-companion.schema").default().name then
         return true
       end
@@ -52,7 +52,7 @@ describe("schema detection:", function()
         },
       },
     }
-    local result = require("yaml-companion").get_buf_schema(0)
+    local result = require("yaml-companion").get_buf_schemas(0)
     assert.are.same(expect, result)
   end)
 
@@ -67,16 +67,16 @@ describe("schema detection:", function()
       },
     }
 
-    require("yaml-companion").set_buf_schema(0, schema)
+    require("yaml-companion").set_buf_schemas(0, schema)
 
     wait_until(function()
-      if "gitlab-ci" ~= require("yaml-companion").get_buf_schema(0).result[1].name then
+      if "gitlab-ci" ~= require("yaml-companion").get_buf_schemas(0).result[1].name then
         return true
       end
     end)
 
     local expect = schema
-    local result = require("yaml-companion").get_buf_schema(0)
+    local result = require("yaml-companion").get_buf_schemas(0)
     assert.are.same(expect, result)
     vim.api.nvim_buf_delete(0, { force = true })
   end)
@@ -93,12 +93,12 @@ describe("schema detection:", function()
       },
     }
     wait_until(function()
-      local result = require("yaml-companion").get_buf_schema(0)
+      local result = require("yaml-companion").get_buf_schemas(0)
       if result.name ~= require("yaml-companion.schema").default().name then
         return true
       end
     end)
-    local result = require("yaml-companion").get_buf_schema(0)
+    local result = require("yaml-companion").get_buf_schemas(0)
     assert.are.same(expect, result)
     vim.api.nvim_buf_delete(0, { force = true })
   end)
@@ -113,12 +113,12 @@ describe("schema detection:", function()
     )
     local expect = { result = { require("yaml-companion.builtin.kubernetes").handles()[1] } }
     wait_until(function()
-      local result = require("yaml-companion").get_buf_schema(0)
+      local result = require("yaml-companion").get_buf_schemas(0)
       if result.name ~= require("yaml-companion.schema").default().name then
         return true
       end
     end)
-    local result = require("yaml-companion").get_buf_schema(0)
+    local result = require("yaml-companion").get_buf_schemas(0)
     assert.are.same(expect, result)
   end)
 
@@ -147,12 +147,12 @@ describe("schema detection:", function()
     assert(buf("test: true\n", "yaml", "dummy.yml"))
     local expect = { result = require("yaml-companion._matchers.dummy").handles() }
     wait_until(function()
-      local result = require("yaml-companion").get_buf_schema(0)
+      local result = require("yaml-companion").get_buf_schemas(0)
       if result.result[1].name ~= require("yaml-companion.schema").default().name then
         return true
       end
     end)
-    local result = require("yaml-companion").get_buf_schema(0)
+    local result = require("yaml-companion").get_buf_schemas(0)
     assert.are.same(expect, result)
     vim.api.nvim_buf_delete(0, { force = true })
   end)

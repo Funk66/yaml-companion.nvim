@@ -42,7 +42,7 @@ matchers.manager = setmetatable({}, {
 ---         function(bufnr) -> table | nil
 ---
 ---         Called once per buffer if no other matcher recognizes the file. It
----         Should return a table with the schema to be used in bufnr.
+---         Should return a list of all schemas to be used in bufnr.
 ---
 ---     - handles:
 ---         function() -> nil
